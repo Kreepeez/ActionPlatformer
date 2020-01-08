@@ -15,17 +15,16 @@ public class Projectile extends GameObject implements ImageObserver {
         if(KeyInput.dir == 1){
             this.setVelX(17);
         }else if(KeyInput.dir == 0) this.setVelX(-17);
-
     }
 
     public  Image img;
-    private ImageIcon iconRight = new ImageIcon("src/projectileRight.gif");
-    private ImageIcon iconLeft = new ImageIcon("src/projectileLeft.gif");
+    private ImageIcon iconRight = new ImageIcon("res/projectileRight.gif");
+    private ImageIcon iconLeft = new ImageIcon("res/projectileLeft.gif");
 
 
     @Override
     public Rectangle getBounds() {
-        return null;
+        return new Rectangle((int)x,(int)y,34,20);
     }
 
     @Override
@@ -39,12 +38,41 @@ public class Projectile extends GameObject implements ImageObserver {
     }
 
     @Override
-    public Rectangle getBoundsBottom() {
+    public Rectangle getBoundsTop() {
         return null;
+    }
+
+    private void collision(){
+        for(int i = 0; i < handler.object.size(); i++){
+            GameObject tempObject = handler.object.get(i);
+
+            if(tempObject.id == ID.Collidable && getBounds().intersects(tempObject.getBounds()))
+                handler.removeObject(this);
+
+        }
+    }
+
+    private void outOfBounds(){
+
+        for(int i = 0; i < handler.object.size(); i++){
+            GameObject tempObject = handler.object.get(i);
+
+            if(tempObject.id == ID.Player){
+                if(this.getX() > tempObject.getX() +600 ||
+                        this.getX() < tempObject.getX() - 600){
+                    handler.removeObject(this);
+
+                }
+            }
+        }
     }
 
     @Override
     public void tick() {
+
+        collision();
+
+        outOfBounds();
 
         x += velX;
 
@@ -58,7 +86,7 @@ public class Projectile extends GameObject implements ImageObserver {
     @Override
     public void render(Graphics g) {
 
-        g.setColor(Color.WHITE);
+       // g.setColor(Color.WHITE);
       //  g. fillOval((int)x,(int)y,32,32);
 
         g.drawImage(img, (int)x,(int)y, this);

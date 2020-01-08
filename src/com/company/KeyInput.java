@@ -5,9 +5,9 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter {
 
-    private Handler handler;
-    private Game game;
-    boolean[] keyDown = new boolean[10];
+    Handler handler;
+
+    private boolean[] keyDown = new boolean[10];
 
     public static short dir;
 
@@ -17,14 +17,10 @@ public class KeyInput extends KeyAdapter {
 
     public static boolean shoot = false;
 
-    public float dashSpeed = 7.0f;
-
-
-
-    public KeyInput(Handler handler, Game game){
+    public KeyInput(Handler handler){
 
         this.handler = handler;
-        this.game = game;
+
     }
 
 
@@ -35,18 +31,21 @@ public class KeyInput extends KeyAdapter {
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject tempObject = handler.object.get(i);
 
-            if(tempObject.getId()== ID.Player){
+            if(tempObject.getId()== ID.Player) {
 
-                if(key == KeyEvent.VK_Z && !dash && !jumped && Player.dashCD >= 40 && Player.dashTimer<10){
+                if (key == KeyEvent.VK_Z  && !jumped && Player.dashCD >= 40 && Player.dashTimer < 10) {
 
-                    if(dir == 1 && tempObject.velX >0 ){
-                        tempObject.setVelX(12.0f);
+                    keyDown[3] = true;
+
+
+                if (dir == 1 && tempObject.velX > 0) {
+                        tempObject.setVelX(9.0f);
                         Player.dashCD = 0;
                         dash = true;
                         Player.dashTimer = 10;
 
-                    }else if (dir == 0 && tempObject.velX <0 ){
-                        tempObject.setVelX(-12.0f);
+                    } if (dir == 0 && tempObject.velX < 0) {
+                        tempObject.setVelX(-9.0f);
                         Player.dashCD = 0;
                         dash = true;
                         Player.dashTimer = 10;
@@ -56,43 +55,51 @@ public class KeyInput extends KeyAdapter {
 
                 }
 
-        if(key == KeyEvent.VK_D){
+                if (key == KeyEvent.VK_D) {
 
-            if(dash){
-                tempObject.setVelX(12.0f);
-            }else {
-                tempObject.setVelX(5.0f);
+                    if(keyDown[4]) shoot = false;
+
+                    if (dash) {
+                        tempObject.setVelX(12.0f);
+                    } else {
+                        tempObject.setVelX(5.0f);
+                    }
+                    keyDown[0] = true;
+                    dir = 1;
+
+                }
+                if (key == KeyEvent.VK_A) {
+                    if(keyDown[4]) shoot = false;
+                    if (dash) {
+                        tempObject.setVelX(-12.0f);
+                    } else {
+                        tempObject.setVelX(-5.0f);
+                    }
+                    keyDown[1] = true;
+                    dir = 0;
+
+                }
+                if (key == KeyEvent.VK_G && !jumped) {
+                    if(keyDown[4]) shoot = false;
+                    tempObject.setVelY(-15);
+                    keyDown[2] = true;
+                    jumped = true;
+
+                }
+                if (key == KeyEvent.VK_T && !jumped && !dash && !shoot) {
+
+                    tempObject.setVelX(0);
+                    shoot = true;
+                    keyDown[4] = true;
+
+                }
+
             }
-            keyDown[0] = true;
-            dir = 1;
-
         }
-        if(key == KeyEvent.VK_A){
-            if(dash){
-                tempObject.setVelX(-12.0f);
-            }else {
-                tempObject.setVelX(-5.0f);
-            }
-            keyDown[1] = true;
-            dir = 0;
+    }
 
-        }
-        if(key == KeyEvent.VK_G && !jumped ){
+    public void tick(){
 
-            tempObject.setVelY(-15);
-            keyDown[2] = true;
-            jumped = true;
-
-        }
-        if(key == KeyEvent.VK_T && !jumped && !dash && !shoot){
-
-            tempObject.setVelX(0);
-            shoot = true;
-
-        }
-
-            }
-        }
     }
 
     @Override

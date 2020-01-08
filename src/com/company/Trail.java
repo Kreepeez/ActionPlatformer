@@ -6,16 +6,14 @@ import java.awt.image.ImageObserver;
 
 public class Trail extends GameObject implements ImageObserver {
 
-
-
     private Handler handler;
     private float alpha = 1;
-    private ImageIcon trailDashRight = new ImageIcon("src/dashTrailRight.gif");
-    private ImageIcon trailDashLeft = new ImageIcon("src/dashTrailLeft.gif");
-    private ImageIcon trailUpRight = new ImageIcon("src/trailUpRight.gif");
-    private ImageIcon trailUpLeft = new ImageIcon("src/trailUpLeft.gif");
-    private ImageIcon trailDownRight = new ImageIcon("src/trailDownRight.gif");
-    private ImageIcon trailDownLeft = new ImageIcon("src/trailDownLeft.gif");
+    private ImageIcon trailDashRight = new ImageIcon("res/dashTrailRight.gif");
+    private ImageIcon trailDashLeft = new ImageIcon("res/dashTrailLeft.gif");
+    private ImageIcon trailUpRight = new ImageIcon("res/trailUpRight.gif");
+    private ImageIcon trailUpLeft = new ImageIcon("res/trailUpLeft.gif");
+    private ImageIcon trailDownRight = new ImageIcon("res/trailDownRight.gif");
+    private ImageIcon trailDownLeft = new ImageIcon("res/trailDownLeft.gif");
     private Image trail;
     private float life;
 
@@ -41,28 +39,24 @@ public class Trail extends GameObject implements ImageObserver {
     }
 
     @Override
-    public Rectangle getBoundsBottom() {
+    public Rectangle getBoundsTop() {
         return null;
     }
 
 
     public void tick() {
 
+        for(int i = 0; i< handler.object.size(); i++){
+            GameObject tempObject = handler.object.get(i);
 
+            if(tempObject.id == ID.Player){
 
-            for(int i = 0; i< handler.object.size(); i++){
-                GameObject tempObject = handler.object.get(i);
-
-                if(tempObject.id == ID.Player){
-
-
-                    if(KeyInput.dir == 1){
-                        if(tempObject.velY < 0){
-                            trail = trailUpRight.getImage();
-                        }else if(tempObject.velY > 0){
-                            trail = trailDownRight.getImage();
-                        }else
-                            trail = trailDashRight.getImage();
+                if(KeyInput.dir == 1){
+                    if(tempObject.velY < 0){
+                        trail = trailUpRight.getImage();
+                    }else if(tempObject.velY > 0){
+                        trail = trailDownRight.getImage();
+                    }else trail = trailDashRight.getImage();
                     }
 
 
@@ -73,12 +67,9 @@ public class Trail extends GameObject implements ImageObserver {
                             trail = trailDownLeft.getImage();
                         }else
                             trail = trailDashLeft.getImage();
-
                     }
-
-                }
             }
-
+        }
 
         if(alpha>life){
             alpha -= life - 0.001f;
@@ -96,9 +87,11 @@ public class Trail extends GameObject implements ImageObserver {
         Graphics2D g2d = (Graphics2D)g;
 
         g2d.setComposite(makeTransparent(alpha));
+
+       // if(KeyInput.dir == 1){
+
+       // }
         g.drawImage(trail,(int) getX(),(int)getY(),this);
-
-
         g2d.setComposite(makeTransparent(1));
     }
 

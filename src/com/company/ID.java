@@ -5,7 +5,7 @@ public enum ID {
     Player(),
     Enemy(),
     Collidable(),
-    CollidableSide(),
     Trail(),
-    Projectile()
+    Projectile(),
+    Fill()
 }

@@ -8,17 +8,17 @@ public class Camera {
         return x;
     }
 
-    public void setX(float x) {
+   /* public void setX(float x) {
         this.x = x;
-    }
+    } */
 
     public float getY() {
         return y;
     }
 
-    public void setY(float y) {
+   /* public void setY(float y) {
         this.y = y;
-    }
+    } */
 
     public Camera(float x, float y){
         this.x = x;
