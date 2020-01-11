@@ -14,11 +14,16 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
     private Handler handler;
     private Camera camera;
-    private BufferedImage level;
+    public BufferedImage level, level2, level3,level4;
     private KeyInput keyInput;
     static Texture texture;
-    private ImageIcon icon = new ImageIcon("res/bkg.jpg");
-    private Image bkg = icon.getImage();
+    public static int lvl = 1;
+
+
+    //private ImageIcon icon = new ImageIcon("res/foreground.png");
+     BufferedImage background;
+    private ImageIcon iconback = new ImageIcon("src/foggy.png");
+     // private Image background = iconback.getImage();
 
 
     public Game(){
@@ -49,7 +54,9 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0,0);
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
-        loadImageLevel(level);
+        handler.loadImageLevel(level);
+        background = loader.loadImage("/foggy.png");
+
 
     }
 
@@ -106,72 +113,22 @@ public class Game extends Canvas implements Runnable {
         else return var;
     } */
 
-    private void loadImageLevel(BufferedImage image){
-        int w = image.getWidth();
-        int h = image.getHeight();
 
-        for(int xx = 0; xx <h; xx++){
-            for(int yy = 0; yy <w; yy++){
-                int pixel = image.getRGB(xx,yy);
-                int red = (pixel >> 16) & 0xff;
-                int green = (pixel >> 8) & 0xff;
-                int blue = (pixel) & 0xff;
-
-
-                if(red == 0 && green == 0 && blue == 255){
-                    handler.addObject(new Player(xx*32,yy*32, ID.Player, handler)); //player
-                }
-                else if(red == 76 && green == 255 && blue == 0){
-                    handler.addObject(new Block(xx*32,yy*32,1,ID.Collidable)); //top
-                }
-                else if(red == 100 && green == 100 && blue == 100){
-                    handler.addObject(new Block(xx*32,yy*32,5,ID.Collidable)); //left
-                }
-                else if(red == 160 && green == 160 && blue == 160){
-                    handler.addObject(new Block(xx*32,yy*32,6,ID.Collidable)); //right
-                }
-                else if(red == 91 && green == 127 && blue == 0){
-                    handler.addObject(new Block(xx*32,yy*32,0,ID.Collidable)); //top left
-                }
-                else if(red == 0 && green == 19 && blue == 127){
-                    handler.addObject(new Block(xx*32,yy*32,3,ID.Collidable)); //inner left
-                }
-                else if(red == 0 && green == 148 && blue == 255){
-                    handler.addObject(new Block(xx*32,yy*32,4,ID.Collidable)); //inner right
-                }
-                else if(red == 0 && green == 127 && blue == 14){
-                    handler.addObject(new Block(xx*32,yy*32,2,ID.Collidable)); //top right
-                }
-                else if(red == 178 && green == 0 && blue == 255){
-                    handler.addObject(new Block(xx*32,yy*32,8,ID.Collidable)); //platform left
-                }
-                else if(red == 255 && green == 0 && blue == 220){
-                    handler.addObject(new Block(xx*32,yy*32,9,ID.Collidable)); //platform mid
-                }
-                else if(red == 255 && green == 0 && blue == 110){
-                    handler.addObject(new Block(xx*32,yy*32,10,ID.Collidable)); //platform right
-                }
-                else if(red == 255 && green == 255 && blue == 255){
-                    handler.addFill(new BlockFill(xx*32,yy*32, ID.Fill)); //mid
-                }
-                else;
-            }
-        }
-
-    }
-    static int x;
+    static float fgx;
+    // static int fgy;
 
     private void tick(){
 
-      //  x--;
+
         handler.tick();
-        keyInput.tick();
 
         for(int i = 0; i<handler.object.size(); i++){
             if(handler.object.get(i).id == ID.Player){
                 camera.tick(handler.object.get(i));
             }
         }
+        fgx-= 0.5f;
+
     }
 
     private void render(){
@@ -186,13 +143,29 @@ public class Game extends Canvas implements Runnable {
 
         g.setColor(Color.BLACK);
         g.fillRect(0,0, WIDTH, HEIGHT);
-        g.drawImage(bkg,x,0,this);
+
+        switch (lvl){
+            case 1:{
+                for (int b = 0; b < background.getWidth()*20; b += background.getWidth()){
+                    g.drawImage(background,b + (int)fgx,0,this);
+                }
+            }case 2:{
+                for (int b = 0; b < background.getWidth()*20; b += background.getWidth()){
+                    g.drawImage(background,b + (int)fgx,0,this);
+                }
+            }
+        }
+
+
+      //  g.drawImage(background,(int)fgx,0,this);
 
         g2d.translate(camera.getX(),camera.getY());
 
         handler.render(g);
 
         handler.renderFills(g);
+
+
 
         g2d.translate(-camera.getX(),-camera.getY());
 

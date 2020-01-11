@@ -17,6 +17,9 @@ public class KeyInput extends KeyAdapter {
 
     public static boolean shoot = false;
 
+    public static boolean atk1= false;
+
+
     public KeyInput(Handler handler){
 
         this.handler = handler;
@@ -36,7 +39,6 @@ public class KeyInput extends KeyAdapter {
                 if (key == KeyEvent.VK_Z  && !jumped && Player.dashCD >= 40 && Player.dashTimer < 10) {
 
                     keyDown[3] = true;
-
 
                 if (dir == 1 && tempObject.velX > 0) {
                         tempObject.setVelX(9.0f);
@@ -93,13 +95,16 @@ public class KeyInput extends KeyAdapter {
                     keyDown[4] = true;
 
                 }
+                if (key == KeyEvent.VK_F){
+                    if(!atk1){
+                       // tempObject.setVelX(0);
+                      //  Player.atkTimer = 0;
+                        atk1 = true;
+                    }
+                }
 
             }
         }
-    }
-
-    public void tick(){
-
     }
 
     @Override

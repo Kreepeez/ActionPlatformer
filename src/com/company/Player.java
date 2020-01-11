@@ -2,12 +2,19 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
 public class Player extends GameObject implements ImageObserver {
 
     private Handler handler;
 
+    private Animation playerAttack1L;
+    private Animation playerAttack1R;
+
+
+    private ImageIcon atkRight1 = new ImageIcon("res/atkRight1.gif");
+    private ImageIcon atkLeft1 = new ImageIcon("res/atkLeft1.gif");
     private ImageIcon iconWalkRight = new ImageIcon("res/walkRight.gif");
     private ImageIcon iconWalkLeft = new ImageIcon("res/walkLeft.gif");
     private ImageIcon iconStandRight = new ImageIcon("res/standRight.png");
@@ -21,11 +28,20 @@ public class Player extends GameObject implements ImageObserver {
     private ImageIcon iconShootRight = new ImageIcon("res/shootRight.gif");
     private ImageIcon iconShootLeft = new ImageIcon("res/shootLeft.gif");
 
+
+    Texture tex = Game.getInstance();
+
+
     private Image img;
 
     public Player(int x, int y, ID id, Handler handler) {
         super(x, y, id);
 
+        playerAttack1L = new Animation(1, tex.atkLeft1[0], tex.atkLeft1[1], tex.atkLeft1[2], tex.atkLeft1[3]
+                , tex.atkLeft1[4], tex.atkLeft1[5], tex.atkLeft1[6], tex.atkLeft1[7], tex.atkLeft1[8], tex.atkLeft1[9]);
+
+        playerAttack1R = new Animation(1, tex.atkRight1[0], tex.atkRight1[1], tex.atkRight1[2], tex.atkRight1[3]
+                , tex.atkRight1[4], tex.atkRight1[5], tex.atkRight1[6], tex.atkRight1[7], tex.atkRight1[8], tex.atkRight1[9]);
         this.handler = handler;
     }
 
@@ -36,6 +52,8 @@ public class Player extends GameObject implements ImageObserver {
     public static int dashCD = 0;
 
     public static int shootTimer = 0;
+
+    public static int atkTimer = 0;
 
     public Rectangle getBounds() {
 
@@ -79,6 +97,13 @@ public class Player extends GameObject implements ImageObserver {
                 getBoundsLeft().intersects(tempObject.getBounds())){
                    // velX = 0;
                 }
+            }else if(tempObject.id == ID.EndPoint){
+                //switch level
+                if(getBounds().intersects(tempObject.getBounds())){
+                    Game.lvl++;
+                    handler.switchLevel();
+                }
+
             }
 
         }
@@ -126,6 +151,7 @@ public class Player extends GameObject implements ImageObserver {
 
     public void tick() {
 
+
         if(dashCD < 100){
             dashCD++;
         }
@@ -136,27 +162,36 @@ public class Player extends GameObject implements ImageObserver {
         if(dashTimer >0 ) {
             dashTimer--;
         }
+        if(playerAttack1L.getCount() == 10){
+            playerAttack1L.setCount(0);
+            KeyInput.atk1 = false;
+        }else if(playerAttack1R.getCount() == 10){
+            playerAttack1R.setCount(0);
+            KeyInput.atk1 = false;
+        }
+
+       /*if(velX > 0) Game.fgx-- ;
+        else if(velX < 0) Game.fgx++ ;
+        if(velY <0){
+            Game.fgy += -velY;
+        }else if (velY>0){
+            Game.fgy-= velY;
+        } */
 
         x += velX;
         y += velY;
-        if(velX > 0) Game.x--;
-        else if(velX < 0) Game.x++;
-
 
         if(fall || KeyInput.jumped){
             if(velY < 15) velY += 0.5f;
-
             KeyInput.jumped = true;
         }
 
         collisionSide();
 
-
         if (velY<0){
             collisionTop();
         }
         else collisionBottom();
-
 
         if(velX > 5.0f && !KeyInput.dash && !KeyInput.jumped){
             velX = 5.0f;
@@ -178,61 +213,85 @@ public class Player extends GameObject implements ImageObserver {
                 handler.addObject(new Projectile(getX()+65, getY()+20,ID.Projectile, handler));
             }else handler.addObject(new Projectile(getX()-15, getY()+20,ID.Projectile, handler));
         }
+
+       // if(atkTimer == 10 && KeyInput.atk1)
+           // KeyInput.atk1 = false;
+       // if(KeyInput.atk1){
+      //      velX = 0;
+      //      atkTimer++;
+      //  }
+        if(KeyInput.atk1) {
+            playerAttack1L.runAnimation();
+            playerAttack1R.runAnimation();
+        }
     }
+
 
     public void render(Graphics g) {
 
-
-        if(KeyInput.dir == 1){
-
-            if (getVelX()> 0 && !KeyInput.jumped){
-                if(KeyInput.dash){
-                    img = iconDashRight.getImage();
-
+        switch (KeyInput.dir){
+            case 1:{
+                if (getVelX()> 0 && !KeyInput.jumped){
+                    if(KeyInput.dash){
+                        img = iconDashRight.getImage();
+                    }else
+                        img = iconWalkRight.getImage();
+                }
+                if(KeyInput.atk1){
+                    img = atkRight1.getImage();
                 }else
-                    img = iconWalkRight.getImage();
-
-            }
-            if(KeyInput.shoot){
-                img = iconShootRight.getImage();
-            }else
-            if(getVelX() == 0 && getVelY() == 0){
-                img = iconStandRight.getImage();
-            }
-            if(KeyInput.jumped && velY<0){
-                img = iconJumpRightUp.getImage();
-            }
-            if(KeyInput.jumped && velY>0){
-                img = iconJumpRightDown.getImage();
-            }
-
-        }
-        else if(KeyInput.dir == 0){
-
-            if (getVelX()< 0 && !KeyInput.jumped){
-                if(KeyInput.dash){
-                    img = iconDashLeft.getImage();
-
+                if(KeyInput.shoot){
+                    img = iconShootRight.getImage();
                 }else
-                    img = iconWalkLeft.getImage();
-
-
+                if(getVelX() == 0 && !KeyInput.jumped){
+                    img = iconStandRight.getImage();
+                }
+                if(KeyInput.jumped && velY<0){
+                    img = iconJumpRightUp.getImage();
+                }
+                if(KeyInput.jumped && velY>0){
+                    img = iconJumpRightDown.getImage();
+                }
+                break;
             }
-            if(KeyInput.shoot ){
-                img = iconShootLeft.getImage();
-            }else
-            if(getVelX() == 0 && getVelY() == 0){
-                img = iconStandLeft.getImage();
-            }
-            if(KeyInput.jumped  && velY<0){
-                img = iconJumpLeftUp.getImage();
-            }
-            if(KeyInput.jumped  && velY>0){
-                img = iconJumpLeftDown.getImage();
+            case 0:{
+                if (getVelX()< 0 && !KeyInput.jumped){
+                    if(KeyInput.dash){
+                        img = iconDashLeft.getImage();
+                    }else
+                        img = iconWalkLeft.getImage();
+                }
+                if(KeyInput.atk1){
+                    img = atkLeft1.getImage();
+                }else
+                if(KeyInput.shoot ){
+                    img = iconShootLeft.getImage();
+                }else
+                if(getVelX() == 0 && getVelY() == 0){
+                    img = iconStandLeft.getImage();
+                }
+                if(KeyInput.jumped  && velY<0){
+                    img = iconJumpLeftUp.getImage();
+                }
+                if(KeyInput.jumped  && velY>0){
+                    img = iconJumpLeftDown.getImage();
+                }
+                break;
             }
         }
 
-        g.drawImage(img,(int)getX(),(int)getY(),this);
+
+        if(KeyInput.atk1){
+
+            if(KeyInput.dir==0) playerAttack1L.drawAnimation(g,(int)x-80,(int)y-8,155,94);
+            else  playerAttack1R.drawAnimation(g,(int)x, (int) y-8,155,94);
+        }else if(img == atkRight1.getImage()){
+            g.drawImage(img,(int)x,(int)y-5, this);
+        }else if(KeyInput.shoot){
+            g.drawImage(img,(int)getX(),(int)getY()+2,this);
+        }
+
+        else g.drawImage(img,(int)getX(),(int)getY(),this);
 
        //  g.setColor(Color.WHITE);
        //  g.drawRect((int)getX()+15,(int)getY()+73,45, 13); //bottom

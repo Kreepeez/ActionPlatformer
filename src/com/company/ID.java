@@ -7,5 +7,6 @@ public enum ID {
     Collidable(),
     Trail(),
     Projectile(),
-    Fill()
+    Fill(),
+    EndPoint()
 }
