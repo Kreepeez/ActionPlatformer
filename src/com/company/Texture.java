@@ -6,23 +6,37 @@ public class Texture {
 
     SpriteSheet bs;
     SpriteSheet patk1;
+    SpriteSheet patk2;
+    SpriteSheet patk3;
+
     private BufferedImage blockSheet = null;
     private BufferedImage atk1Sheet = null;
+    private BufferedImage atk2Sheet = null;
+    private BufferedImage atk3Sheet = null;
 
     public BufferedImage[] block = new BufferedImage[20];
     public BufferedImage[] atkLeft1 = new BufferedImage[10];
     public BufferedImage[] atkRight1 = new BufferedImage[10];
+    public BufferedImage[] atkLeft2 = new BufferedImage[10];
+    public BufferedImage[] atkRight2 = new BufferedImage[10];
+    public BufferedImage[] atkLeft3 = new BufferedImage[13];
+    public BufferedImage[] atkRight3 = new BufferedImage[13];
+
     public Texture(){
 
         BufferedImageLoader loader = new BufferedImageLoader();
         try {
             blockSheet = loader.loadImage("/blockSheet.png");
             atk1Sheet = loader.loadImage("/atk1Sprites.png");
+            atk2Sheet = loader.loadImage("/atk2sprites.png");
+            atk3Sheet = loader.loadImage("/atk3sprites.png");
         }catch (Exception e){
             e.printStackTrace();
         }
         bs = new SpriteSheet(blockSheet);
         patk1 = new SpriteSheet(atk1Sheet);
+        patk2 = new SpriteSheet(atk2Sheet);
+        patk3 = new SpriteSheet(atk3Sheet);
 
         getTextures();
     }
@@ -67,6 +81,64 @@ public class Texture {
         atkRight1[7] = patk1.grabImage(3,2,74,46);
         atkRight1[8] = patk1.grabImage(2,2,74,46);
         atkRight1[9] = patk1.grabImage(1,2,74,46);
+
+        // Atk2 animation left
+
+        atkLeft2[0] = patk2.grabImage(1,1, 75, 48);
+        atkLeft2[1] = patk2.grabImage(2,1, 75, 48);
+        atkLeft2[2] = patk2.grabImage(3,1, 75, 48);
+        atkLeft2[3] = patk2.grabImage(4,1, 75, 48);
+        atkLeft2[4] = patk2.grabImage(5,1, 75, 48);
+        atkLeft2[5] = patk2.grabImage(6,1, 75, 48);
+        atkLeft2[6] = patk2.grabImage(7,1, 75, 48);
+        atkLeft2[7] = patk2.grabImage(8,1, 75, 48);
+        atkLeft2[8] = patk2.grabImage(9,1, 75, 48);
+        atkLeft2[9] = patk2.grabImage(10,1, 75, 48);
+
+        //Atk2 animation right
+
+        atkRight2[0] = patk2.grabImage(10,2,75,48);
+        atkRight2[1] = patk2.grabImage(9,2,75,48);
+        atkRight2[2] = patk2.grabImage(8,2,75,48);
+        atkRight2[3] = patk2.grabImage(7,2,75,48);
+        atkRight2[4] = patk2.grabImage(6,2,75,48);
+        atkRight2[5] = patk2.grabImage(5,2,75,48);
+        atkRight2[6] = patk2.grabImage(4,2,75,48);
+        atkRight2[7] = patk2.grabImage(3,2,75,48);
+        atkRight2[8] = patk2.grabImage(2,2,75,48);
+        atkRight2[9] = patk2.grabImage(1,2,75,48);
+
+        //Atk3 animation left
+
+        atkLeft3[0] = patk3.grabImage(1,1,80,59);
+        atkLeft3[1] = patk3.grabImage(2,1,80,59);
+        atkLeft3[2] = patk3.grabImage(3,1,80,59);
+        atkLeft3[3] = patk3.grabImage(4,1,80,59);
+        atkLeft3[4] = patk3.grabImage(5,1,80,59);
+        atkLeft3[5] = patk3.grabImage(6,1,80,59);
+        atkLeft3[6] = patk3.grabImage(7,1,80,59);
+        atkLeft3[7] = patk3.grabImage(8,1,80,59);
+        atkLeft3[8] = patk3.grabImage(9,1,80,59);
+        atkLeft3[9] = patk3.grabImage(10,1,80,59);
+        atkLeft3[10] = patk3.grabImage(11,1,80,59);
+        atkLeft3[11] = patk3.grabImage(12,1,80,59);
+        atkLeft3[12] = patk3.grabImage(13,1,80,59);
+
+        //Atk3 animation right
+
+        atkRight3[0] = patk3.grabImage(13,2,80,59);
+        atkRight3[1] = patk3.grabImage(12,2,80,59);
+        atkRight3[2] = patk3.grabImage(11,2,80,59);
+        atkRight3[3] = patk3.grabImage(10,2,80,59);
+        atkRight3[4] = patk3.grabImage(9,2,80,59);
+        atkRight3[5] = patk3.grabImage(8,2,80,59);
+        atkRight3[6] = patk3.grabImage(7,2,80,59);
+        atkRight3[7] = patk3.grabImage(6,2,80,59);
+        atkRight3[8] = patk3.grabImage(5,2,80,59);
+        atkRight3[9] = patk3.grabImage(4,2,80,59);
+        atkRight3[10] = patk3.grabImage(3,2,80,59);
+        atkRight3[11] = patk3.grabImage(2,2,80,59);
+        atkRight3[12] = patk3.grabImage(1,2,80,59);
 
 
     }

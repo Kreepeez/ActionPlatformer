@@ -2,7 +2,7 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
 import java.awt.image.ImageObserver;
 
 public class Player extends GameObject implements ImageObserver {
@@ -11,10 +11,11 @@ public class Player extends GameObject implements ImageObserver {
 
     private Animation playerAttack1L;
     private Animation playerAttack1R;
+    private Animation playerAttack2L;
+    private Animation playerAttack2R;
+    private Animation playerAttack3L;
+    private Animation playerAttack3R;
 
-
-    private ImageIcon atkRight1 = new ImageIcon("res/atkRight1.gif");
-    private ImageIcon atkLeft1 = new ImageIcon("res/atkLeft1.gif");
     private ImageIcon iconWalkRight = new ImageIcon("res/walkRight.gif");
     private ImageIcon iconWalkLeft = new ImageIcon("res/walkLeft.gif");
     private ImageIcon iconStandRight = new ImageIcon("res/standRight.png");
@@ -28,9 +29,7 @@ public class Player extends GameObject implements ImageObserver {
     private ImageIcon iconShootRight = new ImageIcon("res/shootRight.gif");
     private ImageIcon iconShootLeft = new ImageIcon("res/shootLeft.gif");
 
-
     Texture tex = Game.getInstance();
-
 
     private Image img;
 
@@ -42,6 +41,21 @@ public class Player extends GameObject implements ImageObserver {
 
         playerAttack1R = new Animation(1, tex.atkRight1[0], tex.atkRight1[1], tex.atkRight1[2], tex.atkRight1[3]
                 , tex.atkRight1[4], tex.atkRight1[5], tex.atkRight1[6], tex.atkRight1[7], tex.atkRight1[8], tex.atkRight1[9]);
+
+        playerAttack2L = new Animation(1, tex.atkLeft2[0], tex.atkLeft2[1], tex.atkLeft2[2], tex.atkLeft2[3]
+                , tex.atkLeft2[4], tex.atkLeft2[5], tex.atkLeft2[6], tex.atkLeft2[7], tex.atkLeft2[8], tex.atkLeft2[9]);
+
+        playerAttack2R = new Animation(1, tex.atkRight2[0], tex.atkRight2[1], tex.atkRight2[2], tex.atkRight2[3]
+                , tex.atkRight2[4], tex.atkRight2[5], tex.atkRight2[6], tex.atkRight2[7], tex.atkRight2[8], tex.atkRight2[9]);
+
+        playerAttack3L = new Animation(1, tex.atkLeft3[0], tex.atkLeft3[1], tex.atkLeft3[2], tex.atkLeft3[3]
+                , tex.atkLeft3[4], tex.atkLeft3[5], tex.atkLeft3[6], tex.atkLeft3[7], tex.atkLeft3[8], tex.atkLeft3[9]
+                , tex.atkLeft3[10], tex.atkLeft3[11], tex.atkLeft3[12]);
+
+        playerAttack3R = new Animation(1, tex.atkRight3[0], tex.atkRight3[1], tex.atkRight3[2], tex.atkRight3[3]
+                , tex.atkRight3[4], tex.atkRight3[5], tex.atkRight3[6], tex.atkRight3[7], tex.atkRight3[8], tex.atkRight3[9]
+                , tex.atkRight3[10], tex.atkRight3[11], tex.atkRight3[12]);
+
         this.handler = handler;
     }
 
@@ -53,7 +67,11 @@ public class Player extends GameObject implements ImageObserver {
 
     public static int shootTimer = 0;
 
-    public static int atkTimer = 0;
+    public static boolean canAtkNext = false;
+
+    public static boolean walk = false;
+
+    //public static int atkTimer = 0;
 
     public Rectangle getBounds() {
 
@@ -91,8 +109,8 @@ public class Player extends GameObject implements ImageObserver {
 
                 }else{
                     fall = true;
-
                 }
+
                 if(getBoundsRight().intersects(tempObject.getBounds()) ||
                 getBoundsLeft().intersects(tempObject.getBounds())){
                    // velX = 0;
@@ -103,9 +121,7 @@ public class Player extends GameObject implements ImageObserver {
                     Game.lvl++;
                     handler.switchLevel();
                 }
-
             }
-
         }
     }
     private void collisionSide(){
@@ -162,12 +178,30 @@ public class Player extends GameObject implements ImageObserver {
         if(dashTimer >0 ) {
             dashTimer--;
         }
+        if(playerAttack1R.getCount() >7)canAtkNext = true;
+        else if(playerAttack1L.getCount() >7)canAtkNext = true;
+        else if(playerAttack2L.getCount() >7)canAtkNext = true;
+        else if(playerAttack2R.getCount() >7)canAtkNext = true;
+
         if(playerAttack1L.getCount() == 10){
             playerAttack1L.setCount(0);
             KeyInput.atk1 = false;
         }else if(playerAttack1R.getCount() == 10){
             playerAttack1R.setCount(0);
             KeyInput.atk1 = false;
+        }
+        else if(playerAttack2L.getCount() == 10){
+            playerAttack2L.setCount(0);
+            KeyInput.atk2 = false;
+        }else if(playerAttack2R.getCount() == 10){
+            playerAttack2R.setCount(0);
+            KeyInput.atk2 = false;
+        }else if(playerAttack3L.getCount() == 13){
+            playerAttack3L.setCount(0);
+            KeyInput.atk3 = false;
+        }else if(playerAttack3R.getCount() == 13){
+            playerAttack3R.setCount(0);
+            KeyInput.atk3 = false;
         }
 
        /*if(velX > 0) Game.fgx-- ;
@@ -186,6 +220,15 @@ public class Player extends GameObject implements ImageObserver {
             KeyInput.jumped = true;
         }
 
+        if(walk && !KeyInput.dash && !KeyInput.atk1 && !KeyInput.atk2 && !KeyInput.atk3 ){
+            if(KeyInput.dir == 1){
+                if(velX<5)
+                velX = 5.0f;
+            }else if(KeyInput.dir == 0)
+                if(velX>-5)
+                velX = -5.0f;
+        }
+
         collisionSide();
 
         if (velY<0){
@@ -200,7 +243,7 @@ public class Player extends GameObject implements ImageObserver {
         }
 
         if(KeyInput.dash) {
-            handler.addObject(new Trail(getX(), getY(), ID.Trail, handler, 0.15f));
+            handler.addObject(new Trail(getX(), getY(), ID.Trail, handler, 0.18f));
         }
         if(shootTimer<15 && KeyInput.shoot ){
             //KeyInput.shoot = false;
@@ -210,8 +253,8 @@ public class Player extends GameObject implements ImageObserver {
         if(shootTimer == 15 ){
             shootTimer = 0;
             if(KeyInput.dir == 1){
-                handler.addObject(new Projectile(getX()+65, getY()+20,ID.Projectile, handler));
-            }else handler.addObject(new Projectile(getX()-15, getY()+20,ID.Projectile, handler));
+                handler.addObject(new Projectile(getX()+65, getY()+22,ID.Projectile, handler));
+            }else handler.addObject(new Projectile(getX()-15, getY()+22,ID.Projectile, handler));
         }
 
        // if(atkTimer == 10 && KeyInput.atk1)
@@ -223,6 +266,12 @@ public class Player extends GameObject implements ImageObserver {
         if(KeyInput.atk1) {
             playerAttack1L.runAnimation();
             playerAttack1R.runAnimation();
+        }else if(KeyInput.atk2){
+            playerAttack2R.runAnimation();
+            playerAttack2L.runAnimation();
+        }else if(KeyInput.atk3){
+            playerAttack3L.runAnimation();
+            playerAttack3R.runAnimation();
         }
     }
 
@@ -237,9 +286,6 @@ public class Player extends GameObject implements ImageObserver {
                     }else
                         img = iconWalkRight.getImage();
                 }
-                if(KeyInput.atk1){
-                    img = atkRight1.getImage();
-                }else
                 if(KeyInput.shoot){
                     img = iconShootRight.getImage();
                 }else
@@ -261,9 +307,6 @@ public class Player extends GameObject implements ImageObserver {
                     }else
                         img = iconWalkLeft.getImage();
                 }
-                if(KeyInput.atk1){
-                    img = atkLeft1.getImage();
-                }else
                 if(KeyInput.shoot ){
                     img = iconShootLeft.getImage();
                 }else
@@ -283,11 +326,20 @@ public class Player extends GameObject implements ImageObserver {
 
         if(KeyInput.atk1){
 
-            if(KeyInput.dir==0) playerAttack1L.drawAnimation(g,(int)x-80,(int)y-8,155,94);
+            if(KeyInput.dir==0) playerAttack1L.drawAnimation(g,(int)x-80,(int)y-7,155,94);
             else  playerAttack1R.drawAnimation(g,(int)x, (int) y-8,155,94);
-        }else if(img == atkRight1.getImage()){
-            g.drawImage(img,(int)x,(int)y-5, this);
-        }else if(KeyInput.shoot){
+        }
+        else if(KeyInput.atk2){
+            if(KeyInput.dir ==0) playerAttack2L.drawAnimation(g,(int)x-80,(int)y-2 , 155,95);
+            else playerAttack2R.drawAnimation(g,(int)x,(int)y-2, 155,95);
+        }
+        else if(KeyInput.atk3){
+            if(KeyInput.dir ==0) playerAttack3L.drawAnimation(g,(int)x-84,(int)y-23,165,110);
+            else playerAttack3R.drawAnimation(g,(int)x-2,(int)y-23,165,110);
+        }
+
+
+        else if(KeyInput.shoot){
             g.drawImage(img,(int)getX(),(int)getY()+2,this);
         }
 
