@@ -42,13 +42,26 @@ public class Projectile extends GameObject implements ImageObserver {
         return null;
     }
 
+    @Override
+    public Rectangle atkBounds() {
+        return null;
+    }
+
+    @Override
+    public Rectangle dmgBounds() {
+        return null;
+    }
+
+
     private void collision(){
         for(int i = 0; i < handler.object.size(); i++){
             GameObject tempObject = handler.object.get(i);
 
-            if(tempObject.id == ID.Collidable && getBounds().intersects(tempObject.getBounds()))
-                handler.removeObject(this);
+            if(tempObject.id == ID.Collidable || tempObject.id == ID.Enemy)
 
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    handler.removeObject(this);
+                }
         }
     }
 

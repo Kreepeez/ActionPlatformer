@@ -38,6 +38,17 @@ public class Block extends GameObject implements ImageObserver {
         return null;
     }
 
+    @Override
+    public Rectangle atkBounds() {
+        return null;
+    }
+
+    @Override
+    public Rectangle dmgBounds() {
+        return null;
+    }
+
+
     public void render(Graphics g) {
 
 

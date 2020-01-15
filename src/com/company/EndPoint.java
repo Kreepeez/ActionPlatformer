@@ -39,6 +39,16 @@ public class EndPoint extends GameObject implements ImageObserver {
         return null;
     }
 
+    @Override
+    public Rectangle atkBounds() {
+        return null;
+    }
+
+    @Override
+    public Rectangle dmgBounds() {
+        return null;
+    }
+
 
     @Override
     public void tick() {

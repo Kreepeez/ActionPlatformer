@@ -2,7 +2,6 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.ImageObserver;
 
 public class Player extends GameObject implements ImageObserver {
@@ -61,15 +60,19 @@ public class Player extends GameObject implements ImageObserver {
 
     public static boolean fall = true;
 
-    public static int dashTimer = 10;
+    public static short dashTimer = 10;
 
-    public static int dashCD = 0;
+    public static short dashCD = 0;
 
-    public static int shootTimer = 0;
+    public static short shootTimer = 0;
 
     public static boolean canAtkNext = false;
 
     public static boolean walk = false;
+
+    private short hitTimer = 0;
+
+    private Rectangle rect = new Rectangle(0,0,0,0);
 
     //public static int atkTimer = 0;
 
@@ -92,6 +95,42 @@ public class Player extends GameObject implements ImageObserver {
     public Rectangle getBoundsTop() {
         return new Rectangle((int)getX()+20,(int)getY(), 40,10);
     }
+
+    @Override
+    public Rectangle atkBounds() {
+
+       if(KeyInput.dir == 1) {
+
+            if(playerAttack1R.getCount() == 4 || playerAttack2R.getCount() == 4){
+                rect = new Rectangle((int)getX()+55, (int)getY(), 100,80);
+                StatsController.dmg = 10;
+            }
+            else if(playerAttack3R.getCount() == 7) {
+                rect = new Rectangle((int) getX() + 55, (int) getY() - 20, 110, 100);
+                StatsController.dmg = 15;
+            }
+            else rect = new Rectangle(0,0,0,0);
+            }
+        else if(KeyInput.dir == 0){
+            if(playerAttack1L.getCount() == 4 || playerAttack2L.getCount() == 4) {
+                rect = new Rectangle((int) getX() - 80, (int) getY(), 100, 80);
+                StatsController.dmg = 10;
+            }
+            else if(playerAttack3L.getCount()==7){
+                rect = new Rectangle((int)getX()-95, (int)getY()-20, 110,100);
+                StatsController.dmg = 15;
+            }
+            else rect = new Rectangle(0,0,0,0);
+            }else rect = new Rectangle(0,0,0,0);
+        return rect;
+    }
+
+    @Override
+    public Rectangle dmgBounds(){
+        return new Rectangle((int)getX()+25, (int)getY(),25, 80);
+    }
+
+
 
     private void collisionBottom() {
         for (int i = 0; i < handler.object.size(); i++) {
@@ -164,9 +203,26 @@ public class Player extends GameObject implements ImageObserver {
         }
     }
 
+    private void dmgCollision(){
+
+        for(int i = 0; i<handler.object.size(); i++){
+            GameObject tempObject = handler.object.get(i);
+
+            if(tempObject.id == ID.Enemy){
+                if(dmgBounds().intersects(tempObject.getBounds()) && hitTimer > 20 && StatsController.playerHP >0) {
+                    StatsController.playerHP -= 10;
+                    hitTimer = 0;
+                    handler.addObject(new PlayerDamageText((int)x,(int)y,ID.Text,handler,0.07f, 10));
+                }
+            }
+        }
+
+    }
 
     public void tick() {
 
+        hitTimer++;
+        dmgCollision();
 
         if(dashCD < 100){
             dashCD++;
@@ -253,8 +309,8 @@ public class Player extends GameObject implements ImageObserver {
         if(shootTimer == 15 ){
             shootTimer = 0;
             if(KeyInput.dir == 1){
-                handler.addObject(new Projectile(getX()+65, getY()+22,ID.Projectile, handler));
-            }else handler.addObject(new Projectile(getX()-15, getY()+22,ID.Projectile, handler));
+                handler.addObject(new Projectile(getX()+85, getY()+22,ID.Projectile, handler));
+            }else handler.addObject(new Projectile(getX()-35, getY()+22,ID.Projectile, handler));
         }
 
        // if(atkTimer == 10 && KeyInput.atk1)
@@ -272,6 +328,13 @@ public class Player extends GameObject implements ImageObserver {
         }else if(KeyInput.atk3){
             playerAttack3L.runAnimation();
             playerAttack3R.runAnimation();
+        }else{
+            playerAttack3R.setCount(0);
+            playerAttack2R.setCount(0);
+            playerAttack1R.setCount(0);
+            playerAttack2L.setCount(0);
+            playerAttack3L.setCount(0);
+            playerAttack1L.setCount(0);
         }
     }
 
@@ -350,6 +413,8 @@ public class Player extends GameObject implements ImageObserver {
        //  g.drawRect((int)getX()+20,(int)getY(), 40,10); //top
        //  g.drawRect((int)getX()+10,(int)getY()+10, 30, 60); //left
        //  g.drawRect((int)getX()+40,(int)getY()+10, 30, 60); //right
+
+       //  g.drawRect((int)getX()+25, (int)getY(),25, 80);  //dmg
     }
 
 

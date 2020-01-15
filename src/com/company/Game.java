@@ -13,6 +13,7 @@ public class Game extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     private Handler handler;
+    private StatsController statsController;
     private Camera camera;
     public BufferedImage level, level2, level3,level4;
     private KeyInput keyInput;
@@ -53,6 +54,7 @@ public class Game extends Canvas implements Runnable {
         level = loader.loadImage("/level1.png");
         camera = new Camera(0,0);
         handler = new Handler();
+        statsController = new StatsController();
         this.addKeyListener(new KeyInput(handler));
         handler.loadImageLevel(level);
         background = loader.loadImage("/foggy.png");
@@ -103,7 +105,7 @@ public class Game extends Canvas implements Runnable {
         stop();
 
     }
-   /* public static float clamp(float var, float min, float max){
+    public static float clamp(float var, float min, float max){
         if(var >= max){
             return var = max;
         }
@@ -111,7 +113,7 @@ public class Game extends Canvas implements Runnable {
             return var = min;
         }
         else return var;
-    } */
+    }
 
 
     static float fgx;
@@ -119,8 +121,9 @@ public class Game extends Canvas implements Runnable {
 
     private void tick(){
 
-
+        statsController.tick();
         handler.tick();
+
 
         for(int i = 0; i<handler.object.size(); i++){
             if(handler.object.get(i).id == ID.Player){
@@ -165,9 +168,9 @@ public class Game extends Canvas implements Runnable {
 
         handler.renderFills(g);
 
-
-
         g2d.translate(-camera.getX(),-camera.getY());
+
+        statsController.render(g);
 
         g.dispose();
         bs.show();

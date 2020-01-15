@@ -8,5 +8,6 @@ public enum ID {
     Trail(),
     Projectile(),
     Fill(),
-    EndPoint()
+    EndPoint(),
+    Text()
 }

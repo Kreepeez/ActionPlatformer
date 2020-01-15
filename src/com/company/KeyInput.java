@@ -65,6 +65,7 @@ public class KeyInput extends KeyAdapter {
                     atk3 = false;
 
                     if(keyDown[4]) shoot = false;
+                    keyDown[4] = false;
 
                     if (dash) {
                         tempObject.setVelX(12.0f);
@@ -83,6 +84,7 @@ public class KeyInput extends KeyAdapter {
                     atk3 = false;
 
                     if(keyDown[4]) shoot = false;
+                    keyDown[4] = false;
                     if (dash) {
                         tempObject.setVelX(-12.0f);
                     } else {
@@ -117,17 +119,22 @@ public class KeyInput extends KeyAdapter {
                     Player.walk = false;
 
                 }
-                if (key == KeyEvent.VK_F && !jumped && !keyDown[4]){
+                if (key == KeyEvent.VK_F && !jumped && !keyDown[4] && !keyDown[5]){
+
                     if(!atk1 && !atk2 && !atk3){
+
                         tempObject.setVelX(0);
                       //  Player.atkTimer = 0;
                         atk1 = true;
-                    }else if(!atk2 && Player.canAtkNext && atk1){
+                       // StatsController.dmg = 10;
+                    }else if(!atk2 && Player.canAtkNext && atk1 && !atk3){
                         atk2 = true;
-                        Player.canAtkNext = false;
-                    }else if(!atk3 && Player.canAtkNext && atk2 && !atk1){
+                        Player.canAtkNext = true;
+    //                    StatsController.dmg = 10;
+                    }else if(!atk3 && Player.canAtkNext  && !atk1){
                         atk3 = true;
                         Player.canAtkNext = false;
+           //             StatsController.dmg = 15;
                     }
                     keyDown[5] = true;
                 }

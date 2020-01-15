@@ -95,6 +95,8 @@ public class Handler {
                     addObject(new EndPoint(xx*32, yy*32, ID.EndPoint));
                 }if(red == 0 && green == 0 && blue == 255){
                     addObject(new Player(xx*32,yy*32, ID.Player, this)); //player
+                }else if(red == 255 && green == 0 && blue == 0){
+                    addObject(new Enemy1(xx*32, yy*32, ID.Enemy,35, this));
                 }
                 else;
             }

@@ -20,6 +20,10 @@ public abstract class GameObject {
     public abstract  Rectangle getBoundsLeft();
     public abstract  Rectangle getBoundsRight();
     public abstract  Rectangle getBoundsTop();
+    public abstract Rectangle atkBounds();
+    public abstract Rectangle dmgBounds();
+
+
     public abstract void tick();
     public abstract void render(Graphics g);
 
