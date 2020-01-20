@@ -9,5 +9,7 @@ public enum ID {
     Projectile(),
     Fill(),
     EndPoint(),
-    Text()
+    Text(),
+    EnemyProjectile(),
+    StartPoint()
 }

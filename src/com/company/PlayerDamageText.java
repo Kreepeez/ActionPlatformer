@@ -66,7 +66,7 @@ public class PlayerDamageText extends GameObject{
     public void render(Graphics g) {
 
         Font font = new Font("arial", 1, 30);
-        g.setColor(Color.red);
+        g.setColor(Color.yellow);
         g.setFont(font);
 
         g.drawString("-" + dmgText,(int)x,(int)y);

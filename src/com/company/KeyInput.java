@@ -44,13 +44,13 @@ public class KeyInput extends KeyAdapter {
                     keyDown[3] = true;
 
                 if (dir == 1 && tempObject.velX > 0) {
-                        tempObject.setVelX(9.0f);
+                        tempObject.setVelX(10.0f);
                         Player.dashCD = 0;
                         dash = true;
                         Player.dashTimer = 10;
 
                     } if (dir == 0 && tempObject.velX < 0) {
-                        tempObject.setVelX(-9.0f);
+                        tempObject.setVelX(-10.0f);
                         Player.dashCD = 0;
                         dash = true;
                         Player.dashTimer = 10;
@@ -160,6 +160,10 @@ public class KeyInput extends KeyAdapter {
                     keyDown[1] = false;
                     Player.walk = false;
                 }
+                if(key == KeyEvent.VK_G){
+                    keyDown[2] = false;
+                   // tempObject.setVelY(0);
+                }
 
                 if (!keyDown[0] && !keyDown[1]) {
                     tempObject.setVelX(0);
@@ -196,5 +200,4 @@ public class KeyInput extends KeyAdapter {
 
         }
     }
-
 }

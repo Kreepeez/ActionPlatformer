@@ -48,7 +48,6 @@ public class Block extends GameObject implements ImageObserver {
         return null;
     }
 
-
     public void render(Graphics g) {
 
 

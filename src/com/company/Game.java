@@ -51,13 +51,14 @@ public class Game extends Canvas implements Runnable {
         texture = new Texture();
         keyInput = new KeyInput(handler);
         BufferedImageLoader loader = new BufferedImageLoader();
-        level = loader.loadImage("/level1.png");
+        //level = loader.loadImage("/level1.png");
         camera = new Camera(0,0);
         handler = new Handler();
-        statsController = new StatsController();
+        statsController = new StatsController(handler);
         this.addKeyListener(new KeyInput(handler));
-        handler.loadImageLevel(level);
+        //handler.loadImageLevel(level);
         background = loader.loadImage("/foggy.png");
+        handler.switchLevel();
 
 
     }
@@ -164,9 +165,9 @@ public class Game extends Canvas implements Runnable {
 
         g2d.translate(camera.getX(),camera.getY());
 
-        handler.render(g);
-
         handler.renderFills(g);
+
+        handler.render(g);
 
         g2d.translate(-camera.getX(),-camera.getY());
 

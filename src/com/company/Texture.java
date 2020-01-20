@@ -8,11 +8,15 @@ public class Texture {
     SpriteSheet patk1;
     SpriteSheet patk2;
     SpriteSheet patk3;
+    SpriteSheet phurt;
+    SpriteSheet enemy1;
 
     private BufferedImage blockSheet = null;
     private BufferedImage atk1Sheet = null;
     private BufferedImage atk2Sheet = null;
     private BufferedImage atk3Sheet = null;
+    private BufferedImage hurtSheet = null;
+    private BufferedImage enemy1Sheet = null;
 
     public BufferedImage[] block = new BufferedImage[20];
     public BufferedImage[] atkLeft1 = new BufferedImage[10];
@@ -21,6 +25,16 @@ public class Texture {
     public BufferedImage[] atkRight2 = new BufferedImage[10];
     public BufferedImage[] atkLeft3 = new BufferedImage[13];
     public BufferedImage[] atkRight3 = new BufferedImage[13];
+    public BufferedImage[] hurtLeft = new BufferedImage[4];
+    public BufferedImage[] hurtRight = new BufferedImage[4];
+
+    public BufferedImage[] enemy1IdleR = new BufferedImage[1];
+    public BufferedImage[] enemy1IdleL = new BufferedImage[1];
+    public BufferedImage[] enemy1walkR = new BufferedImage[4];
+    public BufferedImage[] enemy1walkL = new BufferedImage[4];
+    public BufferedImage[] enemy1ShootR = new BufferedImage[3];
+    public BufferedImage[] enemy1ShootL = new BufferedImage[3];
+
 
     public Texture(){
 
@@ -30,6 +44,8 @@ public class Texture {
             atk1Sheet = loader.loadImage("/atk1Sprites.png");
             atk2Sheet = loader.loadImage("/atk2sprites.png");
             atk3Sheet = loader.loadImage("/atk3sprites.png");
+            hurtSheet = loader.loadImage("/hurtSprites.png");
+            enemy1Sheet = loader.loadImage("/enemy1sprites.png");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -37,6 +53,8 @@ public class Texture {
         patk1 = new SpriteSheet(atk1Sheet);
         patk2 = new SpriteSheet(atk2Sheet);
         patk3 = new SpriteSheet(atk3Sheet);
+        phurt = new SpriteSheet(hurtSheet);
+        enemy1 = new SpriteSheet(enemy1Sheet);
 
         getTextures();
     }
@@ -96,8 +114,8 @@ public class Texture {
         atkLeft2[9] = patk2.grabImage(10,1, 75, 48);
 
         //Atk2 animation right
-
         atkRight2[0] = patk2.grabImage(10,2,75,48);
+
         atkRight2[1] = patk2.grabImage(9,2,75,48);
         atkRight2[2] = patk2.grabImage(8,2,75,48);
         atkRight2[3] = patk2.grabImage(7,2,75,48);
@@ -139,6 +157,44 @@ public class Texture {
         atkRight3[10] = patk3.grabImage(3,2,80,59);
         atkRight3[11] = patk3.grabImage(2,2,80,59);
         atkRight3[12] = patk3.grabImage(1,2,80,59);
+
+        //Hurt left
+
+        hurtLeft[0] = phurt.grabImage(1,1,35,42);
+        hurtLeft[1] = phurt.grabImage(2,1,35,42);
+        hurtLeft[2] = phurt.grabImage(1,1,35,42);
+        hurtLeft[3] = phurt.grabImage(2,1,35,42);
+
+        //Hurt right
+
+        hurtRight[0] = phurt.grabImage(1,2,35,42);
+        hurtRight[1] = phurt.grabImage(2,2,35,42);
+        hurtRight[2] = phurt.grabImage(1,2,35,42);
+        hurtRight[3] = phurt.grabImage(2,2,35,42);
+
+        //Enemy 1
+
+        enemy1IdleR[0] = enemy1.grabImage(1,1,35,41);
+        enemy1IdleL[0] = enemy1.grabImage(5,3,35,41);
+
+        enemy1walkR[0] = enemy1.grabImage(2,1,35,41);
+        enemy1walkR[1] = enemy1.grabImage(3,1,35,41);
+        enemy1walkR[2] = enemy1.grabImage(4,1,35,41);
+        enemy1walkR[3] = enemy1.grabImage(5,1,35,41);
+
+        enemy1walkL[0] = enemy1.grabImage(4,3,35,41);
+        enemy1walkL[1] = enemy1.grabImage(3,3,35,41);
+        enemy1walkL[2] = enemy1.grabImage(2,3,35,41);
+        enemy1walkL[3] = enemy1.grabImage(1,3,35,41);
+
+        enemy1ShootR[0] = enemy1.grabImage(1,2,36,41);
+        enemy1ShootR[1] = enemy1.grabImage(2,2,36,41);
+        enemy1ShootR[2] = enemy1.grabImage(3,2,36,41);
+
+        enemy1ShootL[0] = enemy1.grabImage(5,4,37,41);
+        enemy1ShootL[1] = enemy1.grabImage(4,4,37,41);
+        enemy1ShootL[2] = enemy1.grabImage(3,4,37,41);
+
 
 
     }

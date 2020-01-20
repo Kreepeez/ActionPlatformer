@@ -17,6 +17,7 @@ public class DamageText extends GameObject{
     public DamageText(float x, float y, ID id, Handler handler, float life) {
         super(x, y, id);
         dmg = StatsController.dmg;
+        if(KeyInput.dash) dmg = StatsController.dmg*2;
         this.handler = handler;
         this.life = life;
         dmgText = String.valueOf(dmg);

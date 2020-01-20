@@ -9,13 +9,16 @@ public class Handler {
     public Handler(){
         BufferedImageLoader loader = new BufferedImageLoader();
         level2 = loader.loadImage("/level2.png");
+        level = loader.loadImage("/level1.png");
+
     }
 
     LinkedList<GameObject> object = new LinkedList<>();
 
     LinkedList<BlockFill> blockFills = new LinkedList<>();
+    public BufferedImage level, level2, level3,level4;
 
-    private BufferedImage level2 = null;
+   // private BufferedImage level2 = null;
 
     public void tick(){
         for(int i = 0; i < object.size(); i++){
@@ -45,6 +48,7 @@ public class Handler {
     private void clearLevel(){
         object.clear();
         blockFills.clear();
+        if(StatsController.playerHP <= 0) StatsController.playerHP = StatsController.maxHP;
     }
 
     public void loadImageLevel(BufferedImage image){
@@ -57,6 +61,10 @@ public class Handler {
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel) & 0xff;
+
+                 if(red == 255 && green == 127 && blue == 182){
+                    addObject(new PlayerStartPoint(xx*32,yy*32, ID.StartPoint));
+                }
 
 
                 if(red == 76 && green == 255 && blue == 0){
@@ -92,12 +100,13 @@ public class Handler {
                 else if(red == 255 && green == 255 && blue == 255){
                     addFill(new BlockFill(xx*32,yy*32, ID.Fill)); //mid
                 }else if(red == 255 && green == 216 && blue == 0){
-                    addObject(new EndPoint(xx*32, yy*32, ID.EndPoint));
-                }if(red == 0 && green == 0 && blue == 255){
-                    addObject(new Player(xx*32,yy*32, ID.Player, this)); //player
+                    addObject(new EndPoint(xx*32, yy*32, ID.EndPoint)); //End
                 }else if(red == 255 && green == 0 && blue == 0){
-                    addObject(new Enemy1(xx*32, yy*32, ID.Enemy,35, this));
+                    addObject(new Enemy1(xx*32, yy*32, ID.Enemy,100, this));}
+                else if(red == 0 && green == 0 && blue == 255){
+                    addObject(new Player(xx*32,yy*32, ID.Player, this)); //player
                 }
+
                 else;
             }
         }
@@ -108,9 +117,15 @@ public class Handler {
         clearLevel();
 
         switch (Game.lvl){
-            case 2:
+            case 1: {
+
+                loadImageLevel(level);
+            }
+                break;
+            case 2: {
                 loadImageLevel(level2);
                 break;
+            }
         }
     }
 
